@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset=utf-8 />
+    <title>robotjs-browser - demo</title>
+    <script id="robotjs-script" type="text/javascript" src="robotjs-iframe-polyfill.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var p = document.getElementsByTagName("p");
+            var input = document.getElementById("input");
+            var write = document.getElementById("write");
+            var select = document.getElementById("select");
+            input.value = "LoremIpsum";
+            select.addEventListener('click', function() {
+                write.disabled = true;
+                select.disabled = true;
+                var pos = robotjs.pos.textNode(p[0].firstChild, 6);
+                robotjs.wrapper.moveMouseSmooth(pos.x, pos.y).then(function() {
+                    return robotjs.wrapper.mouseToggle("down");
+                }).then(function() {
+                    var pos = robotjs.pos.textNode(p[7].firstChild, 11);
+                    return robotjs.wrapper.moveMouseSmooth(pos.x, pos.y);
+                }).then(function() {
+                    return robotjs.wrapper.mouseToggle("up");
+                }).then(function(){
+                  write.disabled = false;
+                  select.disabled = false;
+                });
+            });
+            write.addEventListener('click', function() {
+              write.disabled = true;
+              select.disabled = true;
+                var pos = robotjs.pos.node(input, "center");
+                robotjs.wrapper.moveMouseSmooth(pos.x, pos.y).then(function() {
+                    return robotjs.wrapper.mouseClick("left", true);
+                }).then(function() {
+                    return robotjs.wrapper.keyTap("backspace");
+                }).then(function() {
+                    return robotjs.wrapper.typeStringDelayed("Lorem ipsum dolor sit amet", 500);
+                }).then(function(){
+                  write.disabled = false;
+                  select.disabled = false;
+                });
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <div>
+        <button id="select" button>select</button>
+        <button id="write" button>write</button>
+    </div>
+    <hr/>
+    <div>
+        <p>Lorem ipsum dolor sit amet, </p>
+        <p>consetetur sadipscing elitr, </p>
+        <p>sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam eriat, </p>
+        <p>sed diam voluptua. </p>
+        <p>At vero eos et accusam et justo duo dolores et ea rebum. </p>
+        <p>Stet clita kasd gubergren, </p>
+        <p>no sea takimata sanctus est Lorem ipsum dolor sit amet. </p>
+        <p>Lorem ipsum dolor sit amet, </p>
+        <p>consetetur sadipscing elitr, </p>
+        <p>sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, </p>
+        <p>sed diam voluptua. </p>
+        <p>At vero eos et accusam et justo duo dolores et ea rebum. </p>
+        <p>Stet clita kasd gubergren, </p>
+        <p>no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+    </div>
+    <form>
+        <input id="input">
+    </form>
+</body>
+
+</html>
